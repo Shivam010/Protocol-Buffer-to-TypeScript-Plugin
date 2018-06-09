@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package Bproto;
+
+import "examples/dependent/aproto/a.proto";
+
+service check{
+    rpc use(Aproto.Emp) returns (Aproto.Emp) {}
+}
+
+message name{
+    string id = 1;
+}
+
+message full{
+    name full_name = 1;
+}

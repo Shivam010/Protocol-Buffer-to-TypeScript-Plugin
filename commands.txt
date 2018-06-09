@@ -1,0 +1,6 @@
+$ pwd
+..\protobuf-to-typescript
+$ protoc -I . -I examples\helloworld examples\helloworld\helloworld.proto --plugin=protoc-gen-custom=runPlugin.bat --custom_out=examples\output
+$ protoc -I . -I examples\dependent\bproto examples\dependent\bproto\b.proto --plugin=protoc-gen-custom=runPlugin.bat --custom_out=examples\output
+
+For Windows set the interpreter to pythno27

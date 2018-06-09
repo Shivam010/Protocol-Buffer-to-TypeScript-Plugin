@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package Aproto;
+
+service Greeter {
+  rpc Check (Emp) returns (Emp) {}
+}
+
+message Emp{
+  string nam = 1;
+}
