@@ -75,7 +75,7 @@ For Windows
 
        $ pwd
        ..\protobuf-to-typescript
-       protoc -I . -I examples examples\test.proto --plugin=protoc-gen-custom=runPlugin.bat --custom_out=examples\output`
+       $ protoc -I . -I examples examples\test.proto --plugin=protoc-gen-custom=runPlugin.bat --custom_out=examples\output`
 
 Fow Linux
 
