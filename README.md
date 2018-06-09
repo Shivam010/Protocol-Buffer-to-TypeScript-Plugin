@@ -14,7 +14,7 @@ This repository contains the TypeScript extension that implements Protocol Buffe
 Consider file test.proto, 
 
 ```proto
-	syntax = "proto3";
+    syntax = "proto3";
 
     package test;
 
@@ -68,14 +68,13 @@ For Windows
 2) Now, edit the `runPlugin.bat` file to make the python file executable.
 
 3) Now, generate your TypeScript code using,
-
-    $ protoc -I <Project_Path> -I <Proto_File_Directory_Path> <Proto_Files_Path> --plugin=protoc-gen-custom=<Executable_File_Path> --custom_out=<Output_Directory_Path>
-
+	
+	`$ protoc -I <Project_Path> -I <Proto_File_Directory_Path> <Proto_Files_Path> --plugin=protoc-gen-custom=<Executable_File_Path> --custom_out=<Output_Directory_Path>`
     Like:
 
-    $ pwd
-    ..\protobuf-to-typescript
-    $ protoc -I . -I examples examples\test.proto --plugin=protoc-gen-custom=runPlugin.bat --custom_out=examples\output
+	`$ pwd
+	`..\protobuf-to-typescript`
+	`$ protoc -I . -I examples examples\test.proto --plugin=protoc-gen-custom=runPlugin.bat --custom_out=examples\output`
 
 Fow Linux
 
@@ -84,11 +83,11 @@ Fow Linux
 
 2) Now, generate your TypeScript code using,
 
-    $ protoc -I <Python_Path> -I <Proto_File_Directory_Path> <Proto_Files_Path> --plugin=protoc-gen-custom=<Plugin_Path> --custom_out=<Output_Directory_Path>
+	$ protoc -I <Python_Path> -I <Proto_File_Directory_Path> <Proto_Files_Path> --plugin=protoc-gen-custom=<Plugin_Path> --custom_out=<Output_Directory_Path>
 
     Like:
-
-    $ protoc -I /usr/local/include -I examples examples\test.proto --plugin=protoc-gen-custom=tsPlugin.py --custom_out=examples\output
+	
+	$ protoc -I /usr/local/include -I examples examples\test.proto --plugin=protoc-gen-custom=tsPlugin.py --custom_out=examples\output
 
     or 
 
