@@ -126,6 +126,8 @@ def nestedTypes(proto_file, proto_package):
     # Nested Inerfaces
     Interfaces = ""
     for msg in proto_file.nested_type:
+        if msg.options.map_entry == True:
+            return Enums + Interfaces
         Interfaces += nestedTypes(msg, proto_package)
         Interfaces += "export interface " + msg.name + " {\n"
         for f in msg.field:
@@ -135,11 +137,16 @@ def nestedTypes(proto_file, proto_package):
                 if dtype in CustomType:
                     dtype = CustomType[dtype][0]
                 else:
-                    if package != proto_package:
-                        dtype = package + "." + dtype
+                    if package != proto_package and package != str(proto_package) + msg.name:
+                            dtype = package + "." + dtype
             arr = ""
-            if f.label == 3: # if Repeated
+            # if Repeated
+            if f.label == 3:
                 arr = "[]"
+            no = len(dtype)
+            if arr != "" and dtype[no-5:] == "Entry":
+                dtype="any"
+                arr=""
             Interfaces += "\t" + variableName(f.name) + ": " + dtype + arr + ";\n"
         Interfaces += "}\n\n"
 
@@ -184,11 +191,17 @@ def generateCode(request, response):
                     if dtype in CustomType:
                         dtype = CustomType[dtype][0]
                     else:
-                        if package != proto_package:
+                        if package != proto_package and package != str(proto_package) + msg.name:
                             dtype = package + "." + dtype
+
                 arr = ""
-                if f.label == 3: # if Repeated
+                # if Repeated
+                if f.label == 3:
                     arr = "[]"
+                no = len(dtype)
+                if arr != "" and dtype[no-5:] == "Entry":
+                    dtype="any"
+                    arr=""
                 Interfaces += "\t" + variableName(f.name) + ": " + dtype + arr + ";\n"
             Interfaces += "}\n\n"
             Interfaces += nestedTypes(msg, proto_package)
