@@ -13,6 +13,21 @@ DataType = {
     16: "number", 17: "number", 18: "number", 19: "number",
 }
 
+# Using Predefined key words
+Predefined = {
+    "break": "_break", "case": "_case", "catch": "_catch", "class": "_class", "const": "_const", "continue": "_continue",
+    "debugger": "_debugger", "default": "_default", "delete": "_delete", "do": "_do", "else": "_else", "enum": "_enum",
+    "export": "_export", "extends": "_extends", "false": "_false", "finally": "_finally", "for": "_for", "function": "_function",
+    "if": "_if", "import": "_import", "in": "_in", "instanceof": "_instanceof", "new": "_new", "null": "_null",
+    "return": "_return", "super": "_super", "switch": "_switch", "this": "_this", "throw": "_throw", "true": "_true",
+    "try": "_try", "typeof": "_typeof", "var": "_var", "void": "_void", "while": "_while", "with": "_with",
+    "implements": "_implements", "interface": "_interface", "let": "_let", "package": "_package", "private": "_private", "protected": "_protected",
+    "public": "_public", "static": "_static", "yield": "_yield", "any": "_any", "boolean": "_boolean", "number": "_number",
+    "string": "_string", "symbol": "_symbol", "abstract": "_abstract", "as": "_as", "async": "_async", "await": "_await",
+    "constructor": "_constructor", "declare": "_declare", "from": "_from", "get": "_get", "is": "_is", "module": "_module",
+    "namespace": "_namespace", "of": "_of", "require": "_require", "set": "_set", "type": "_type",
+}
+
 # Custom Types [ <first>: input_parameter, <second>: output_observable] translated in typesript format
 CustomType = {
     "Empty": ["", "void"], 
@@ -35,6 +50,12 @@ dictPackage = {}
 dictImports = {} 
 # dictImports stores all the classes, enums, and interfaces for a package
 dictDeclarations = {}
+
+# check for Predefined keywords
+def checkPredefined(name):
+    if name in Predefined:
+        name = Predefined[name]
+    return name
 
 # Output File Name
 def fileName(nameWithExt):
@@ -94,12 +115,12 @@ def parametersTypes(proto_package, full_name):
         if CustomType[name][0] == "":
             return ""
         else:
-            return functionParameter(name) + ": " + CustomType[name][0]
+            return checkPredefined(functionParameter(name)) + ": " + CustomType[name][0]
     else:
         inface = name
         if package != proto_package:
-            inface = package + "." + inface
-        return functionParameter(name) + ": " + inface
+            inface = package + "." + checkPredefined(inface)
+        return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface)
 
 # returnTypes returns Function output Parameters
 def returnTypes(proto_package, full_name):
@@ -109,7 +130,7 @@ def returnTypes(proto_package, full_name):
         return CustomType[name][1]
     else:
         if package != proto_package:
-            name = package + "." + name
+            name = package + "." + checkPredefined(name)
         return name
 
 # nestedTypes returns the nested declarations of enums and message 
@@ -117,9 +138,9 @@ def nestedTypes(proto_file, proto_package):
     # Nested Enums
     Enums = ""
     for enm in proto_file.enum_type:
-        Enums += "export enum " + enm.name + " {\n"
+        Enums += "export enum " + checkPredefined(enm.name) + " {\n"
         for v in enm.value:
-            Enums += "\t" + str(v.name) + " = " + str(v.number) + ",\n"
+            Enums += "\t" + checkPredefined(str(v.name)) + " = " + str(v.number) + ",\n"
         Enums += "}\n\n"
 
     # Nested Inerfaces
@@ -128,12 +149,13 @@ def nestedTypes(proto_file, proto_package):
         if msg.options.map_entry == True:
             return Enums + Interfaces
         Interfaces += nestedTypes(msg, proto_package)
-        Interfaces += "export interface " + msg.name + " {\n"
+        Interfaces += "export interface " + checkPredefined(msg.name) + " {\n"
         for f in msg.field:
             dtype = DataType[f.type]
             vtype = ""
             if dtype == "Message" or dtype == "Enum":
                 dtype, package = interfaceName(f.type_name)
+                dtype = checkPredefined(dtype)
                 if dtype in CustomType:
                     dtype = CustomType[dtype][0]
                 else:
@@ -161,6 +183,7 @@ def nestedTypes(proto_file, proto_package):
                                 ty = DataType[nf.type]
                                 if ty == "Message" or ty == "Enum":
                                     ty, package = interfaceName(nf.type_name)
+                                    ty = checkPredefined(ty)
                                     if ty in CustomType:
                                         ty = CustomType[ty][0]
                                     else:
@@ -170,7 +193,7 @@ def nestedTypes(proto_file, proto_package):
                                 break
                 dtype = val
                 arr=""
-            Interfaces += "\t" + variableName(f.name) + ": " + dtype + arr + ";\n"
+            Interfaces += "\t" + checkPredefined(variableName(f.name)) + ": " + dtype + arr + ";\n"
         Interfaces += "}\n\n"
 
     return Enums + Interfaces
@@ -193,28 +216,31 @@ def generateCode(request, response):
         for imp in proto_file.dependency:
             importName = importVariable(PackAge[imp])
             if importName not in ImportIgnore and importName != proto_package:
-                Imports += "import * as " + importName + " from './" + PackAge[imp].lower() + ".service'\n"
+                Imports += "import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"
         
         # Stores Enums
         Enums = ""
         for enm in proto_file.enum_type:
-            Enums += "export enum " + enm.name + " {\n"
+            Enums += "export enum " + checkPredefined(enm.name) + " {\n"
             for v in enm.value:
-                Enums += "\t" + str(v.name) + " = " + str(v.number) + ",\n"
+                Enums += "\t" + checkPredefined(str(v.name)) + " = " + str(v.number) + ",\n"
             Enums += "}\n\n"
 
         # Stores Interfaces
         Interfaces = ""
         for msg in proto_file.message_type:
-            Interfaces += "export interface " + msg.name + " {\n"
+            Interfaces += "export interface " + checkPredefined(msg.name) + " {\n"
             for f in msg.field:
                 dtype = DataType[f.type]
+                vtype = ""
                 if dtype == "Message" or dtype == "Enum":
                     dtype, package = interfaceName(f.type_name)
+                    dtype = checkPredefined(dtype)
                     if dtype in CustomType:
                         dtype = CustomType[dtype][0]
                     else:
                         if package != proto_package and package != str(proto_package) + msg.name:
+                            vtype = dtype
                             dtype = package + "." + dtype
 
                 arr = ""
@@ -225,6 +251,8 @@ def generateCode(request, response):
                 if arr != "" and dtype[no-5:] == "Entry":
                     val="{\n\t\t"
                     for nes in msg.nested_type:
+                        if vtype == nes.name:
+                            dtype = vtype
                         if nes.name == dtype:
                             for nf in nes.field:
                                 if nf.name == "key":
@@ -236,6 +264,7 @@ def generateCode(request, response):
                                     ty = DataType[nf.type]
                                     if ty == "Message" or ty == "Enum":
                                         ty, package = interfaceName(nf.type_name)
+                                        ty = checkPredefined(ty)
                                         if ty in CustomType:
                                             ty = CustomType[ty][0]
                                         else:
@@ -245,7 +274,7 @@ def generateCode(request, response):
                                     break
                     dtype = val
                     arr=""
-                Interfaces += "\t" + variableName(f.name) + ": " + dtype + arr + ";\n"
+                Interfaces += "\t" + checkPredefined(variableName(f.name)) + ": " + dtype + arr + ";\n"
             Interfaces += "}\n\n"
             Interfaces += nestedTypes(msg, proto_package)
 
@@ -254,7 +283,7 @@ def generateCode(request, response):
         for service in proto_file.service:
             Classes += "export abstract class Service" + service.name + " {\n"
             for m in service.method:
-                Classes += "\tabstract " + functionName(m.name) + "(" + parametersTypes(proto_package, m.input_type) + "): Observable<" + returnTypes(proto_package, m.output_type) + ">;\n"
+                Classes += "\tabstract " + checkPredefined(functionName(m.name)) + "(" + parametersTypes(proto_package, m.input_type) + "): Observable<" + checkPredefined(returnTypes(proto_package, m.output_type)) + ">;\n"
             Classes += "}\n\n"
     
         # proto_package will acts as the key to store all imports, classes, enums, and interfaces of all files with same package name
