@@ -112,7 +112,6 @@ def returnTypes(proto_package, full_name):
             name = package + "." + name
         return name
 
-
 # nestedTypes returns the nested declarations of enums and message 
 def nestedTypes(proto_file, proto_package):
     # Nested Enums
@@ -132,12 +131,14 @@ def nestedTypes(proto_file, proto_package):
         Interfaces += "export interface " + msg.name + " {\n"
         for f in msg.field:
             dtype = DataType[f.type]
+            vtype = ""
             if dtype == "Message" or dtype == "Enum":
                 dtype, package = interfaceName(f.type_name)
                 if dtype in CustomType:
                     dtype = CustomType[dtype][0]
                 else:
                     if package != proto_package and package != str(proto_package) + msg.name:
+                            vtype = dtype
                             dtype = package + "." + dtype
             arr = ""
             # if Repeated
@@ -145,7 +146,29 @@ def nestedTypes(proto_file, proto_package):
                 arr = "[]"
             no = len(dtype)
             if arr != "" and dtype[no-5:] == "Entry":
-                dtype="any"
+                val="{\n\t\t"
+                for nes in msg.nested_type:
+                    if vtype == nes.name:
+                        dtype = vtype
+                    if nes.name == dtype:
+                        for nf in nes.field:
+                            if nf.name == "key":
+                                ty = DataType[nf.type]
+                                val += "[key: " + ty + "]: "
+                                break
+                        for nf in nes.field:
+                            if nf.name == "value":
+                                ty = DataType[nf.type]
+                                if ty == "Message" or ty == "Enum":
+                                    ty, package = interfaceName(nf.type_name)
+                                    if ty in CustomType:
+                                        ty = CustomType[ty][0]
+                                    else:
+                                        if package != proto_package and package != str(proto_package) + msg.name:
+                                            ty = package + "." + ty
+                                val += ty + ";\n\t}"
+                                break
+                dtype = val
                 arr=""
             Interfaces += "\t" + variableName(f.name) + ": " + dtype + arr + ";\n"
         Interfaces += "}\n\n"
@@ -200,7 +223,27 @@ def generateCode(request, response):
                     arr = "[]"
                 no = len(dtype)
                 if arr != "" and dtype[no-5:] == "Entry":
-                    dtype="any"
+                    val="{\n\t\t"
+                    for nes in msg.nested_type:
+                        if nes.name == dtype:
+                            for nf in nes.field:
+                                if nf.name == "key":
+                                    ty = DataType[nf.type]
+                                    val += "[key: " + ty + "]: "
+                                    break
+                            for nf in nes.field:
+                                if nf.name == "value":
+                                    ty = DataType[nf.type]
+                                    if ty == "Message" or ty == "Enum":
+                                        ty, package = interfaceName(nf.type_name)
+                                        if ty in CustomType:
+                                            ty = CustomType[ty][0]
+                                        else:
+                                            if package != proto_package and package != str(proto_package) + msg.name:
+                                                ty = package + "." + ty
+                                    val += ty + ";\n\t}"
+                                    break
+                    dtype = val
                     arr=""
                 Interfaces += "\t" + variableName(f.name) + ": " + dtype + arr + ";\n"
             Interfaces += "}\n\n"
