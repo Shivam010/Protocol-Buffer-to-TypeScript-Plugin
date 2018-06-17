@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # tsPlugin.py is the plugin compiler to generate the TypeScript code for the corresponding protocol buffer code
 import sys
-
+import json
 from google.protobuf.compiler import plugin_pb2 as plugin
 from google.protobuf.descriptor_pb2 import DescriptorProto, EnumDescriptorProto, ServiceDescriptorProto
 
@@ -25,7 +25,7 @@ Predefined = {
     "public": "_public", "static": "_static", "yield": "_yield", "any": "_any", "boolean": "_boolean", "number": "_number",
     "string": "_string", "symbol": "_symbol", "abstract": "_abstract", "as": "_as", "async": "_async", "await": "_await",
     "constructor": "_constructor", "declare": "_declare", "from": "_from", "get": "_get", "is": "_is", "module": "_module",
-    "namespace": "_namespace", "of": "_of", "require": "_require", "set": "_set", "type": "_type",
+    "namespace": "_namespace", "of": "_of", "require": "_require", "set": "_set", "type": "_type", "readonly": "_readonly"
 }
 
 # Custom Types [ <first>: input_parameter, <second>: output_observable] translated in typesript format
@@ -162,12 +162,13 @@ def nestedTypes(proto_file, proto_package):
                     if package != proto_package and package != str(proto_package) + msg.name:
                             vtype = dtype
                             dtype = package + "." + dtype
-            arr = ""
+            
             # if Repeated
+            ary = ""
             if f.label == 3:
-                arr = "[]"
+                ary = "[]"
             no = len(dtype)
-            if arr != "" and dtype[no-5:] == "Entry":
+            if ary != "" and dtype[no-5:] == "Entry":
                 val="{\n\t\t"
                 for nes in msg.nested_type:
                     if vtype == nes.name:
@@ -192,8 +193,8 @@ def nestedTypes(proto_file, proto_package):
                                 val += ty + ";\n\t}"
                                 break
                 dtype = val
-                arr=""
-            Interfaces += "\t" + checkPredefined(variableName(f.name)) + ": " + dtype + arr + ";\n"
+                ary=""
+            Interfaces += "\t" + checkPredefined(variableName(f.name)) + ": " + dtype + ary + ";\n"
         Interfaces += "}\n\n"
 
     return Enums + Interfaces
@@ -242,13 +243,17 @@ def generateCode(request, response):
                         if package != proto_package and package != str(proto_package) + msg.name:
                             vtype = dtype
                             dtype = package + "." + dtype
-
-                arr = ""
+                
+                # handling oneof case of protobuf as like union in c/c++
+                oneOf = ""
+                if str(f).find('oneof_index') != -1:
+                    oneOf = "?"
                 # if Repeated
-                if f.label == 3:
-                    arr = "[]"
+                ary = ""
+                if f.label == 3: # 3 for LABEL_REPEATED
+                    ary = "[]"
                 no = len(dtype)
-                if arr != "" and dtype[no-5:] == "Entry":
+                if ary != "" and dtype[no-5:] == "Entry":
                     val="{\n\t\t"
                     for nes in msg.nested_type:
                         if vtype == nes.name:
@@ -273,8 +278,8 @@ def generateCode(request, response):
                                     val += ty + ";\n\t}"
                                     break
                     dtype = val
-                    arr=""
-                Interfaces += "\t" + checkPredefined(variableName(f.name)) + ": " + dtype + arr + ";\n"
+                    ary=""
+                Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
             Interfaces += "}\n\n"
             Interfaces += nestedTypes(msg, proto_package)
 
