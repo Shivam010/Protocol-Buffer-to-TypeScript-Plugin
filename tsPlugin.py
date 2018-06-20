@@ -162,7 +162,11 @@ def nestedTypes(proto_file, proto_package):
                     if package != proto_package and package != str(proto_package) + msg.name:
                             vtype = dtype
                             dtype = package + "." + dtype
-            
+             
+            # handling oneof case of protobuf as like union in c/c++
+            oneOf = ""
+            if str(f).find('oneof_index') != -1:
+                oneOf = "?"
             # if Repeated
             ary = ""
             if f.label == 3:
@@ -194,7 +198,7 @@ def nestedTypes(proto_file, proto_package):
                                 break
                 dtype = val
                 ary=""
-            Interfaces += "\t" + checkPredefined(variableName(f.name)) + ": " + dtype + ary + ";\n"
+            Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
         Interfaces += "}\n\n"
 
     return Enums + Interfaces
