@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package Bproto;
 
-import "examples/aproto/a.proto";
+import "aproto/a.proto";
 
 service check{
     rpc use(Aproto.Emp) returns (Aproto.Emp) {}
