@@ -20,7 +20,7 @@ Predefined = {
     "export": "_export", "extends": "_extends", "false": "_false", "finally": "_finally", "for": "_for", "function": "_function",
     "if": "_if", "import": "_import", "in": "_in", "instanceof": "_instanceof", "new": "_new", "null": "_null",
     "return": "_return", "super": "_super", "switch": "_switch", "this": "_this", "throw": "_throw", "true": "_true",
-    "try": "_try", "typeof": "_typeof", "var": "_var", "void": "_void", "while": "_while", "with": "_with",
+    "try": "_try", "typeof": "_typeof", "var": "_var", "void": "void", "while": "_while", "with": "_with",
     "implements": "_implements", "interface": "_interface", "let": "_let", "package": "_package", "private": "_private", "protected": "_protected",
     "public": "_public", "static": "_static", "yield": "_yield", "any": "_any", "boolean": "_boolean", "number": "_number",
     "string": "_string", "symbol": "_symbol", "abstract": "_abstract", "as": "_as", "async": "_async", "await": "_await",
@@ -210,6 +210,9 @@ def generateCode(request, response):
     for proto_file in request.proto_file:
         PackAge[str(proto_file.name)] = str(proto_file.package)
 
+    ImportMap = {}
+    fn = str(request.proto_file[-1].name)
+
     # Parse requests
     for proto_file in request.proto_file:
         # File Name and Package
@@ -221,7 +224,8 @@ def generateCode(request, response):
         for imp in proto_file.dependency:
             importName = importVariable(PackAge[imp])
             if importName not in ImportIgnore and importName != proto_package:
-                Imports += "import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"
+                ImportMap["import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"] = 1
+                #Imports += "import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"
         
         # Stores Enums
         Enums = ""
@@ -307,21 +311,18 @@ def generateCode(request, response):
             dictDeclarations[key] += Classes + Enums + Interfaces
 
     # Fill responses in TypeScript corresponding to the proto::buffer
-    for key in dictPackage.keys():
-        if key in ImportIgnore:
-            continue
-        Imports =   "import { Observable } from 'rxjs';\n" + dictImports[key]
-        Declarations = dictDeclarations[key]
-        f = response.file.add()
-        name = ""
-        name += key[0].lower()
-        for i in range(1,len(key)):
-            if key[i].isupper():
-                name += "."
-            name += key[i].lower()
-        f.name = name + ".service.ts"
-        f.content = Imports + "\n" + Declarations
-
+    key = importVariable(PackAge[fn])
+    f = response.file.add()
+    name = key[0].lower()
+    for i in range(1,len(key)):
+        if key[i].isupper():
+            name += "."
+        name += key[i].lower()
+    f.name = name + ".service.ts"
+    f.content = "import { Observable } from 'rxjs';\n" + dictImports[key]
+    for i in ImportMap:
+        f.content += i
+    f.content += "\n" + dictDeclarations[key]
 
 # Main CallBack
 if __name__ == '__main__':
