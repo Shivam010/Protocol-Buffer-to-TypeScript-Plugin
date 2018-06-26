@@ -88,7 +88,7 @@ Fow Linux
 
     Like:
 
-       $ protoc -I /usr/local/include -I examples\test examples\test\test.proto --plugin=protoc-gen-custom=tsPlugin.py --custom_out=examples\output
+       $ protoc -I /usr/local/include -I examples\test examples/test/test.proto --plugin=protoc-gen-custom=tsPlugin.py --custom_out=examples/output
 
     or 
 
