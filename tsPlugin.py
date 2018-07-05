@@ -25,7 +25,7 @@ Predefined = {
     "public": "_public", "static": "_static", "yield": "_yield", "any": "_any", "boolean": "_boolean", "number": "_number",
     "string": "_string", "symbol": "_symbol", "abstract": "_abstract", "as": "_as", "async": "_async", "await": "_await",
     "constructor": "_constructor", "declare": "_declare", "from": "_from", "get": "_get", "is": "_is", "module": "_module",
-    "namespace": "_namespace", "of": "_of", "require": "_require", "set": "_set", "type": "_type", "readonly": "_readonly"
+    "namespace": "_namespace", "of": "_of", "require": "_require", "set": "_set", "type": "type", "readonly": "_readonly"
 }
 
 # Custom Types [ <first>: input_parameter, <second>: output_observable] translated in typesript format
