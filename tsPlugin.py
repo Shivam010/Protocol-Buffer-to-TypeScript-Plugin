@@ -198,7 +198,9 @@ def nestedTypes(proto_file, proto_package):
                                 break
                 dtype = val
                 ary=""
-            Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
+            Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n"
+            # in case if a TypeScript keyword check is required in variable name of an interface
+            # Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
         Interfaces += "}\n\n"
 
     return Enums + Interfaces
