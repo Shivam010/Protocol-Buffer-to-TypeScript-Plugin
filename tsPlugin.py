@@ -289,7 +289,9 @@ def generateCode(request, response):
                                     break
                     dtype = val
                     ary=""
-                Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
+                Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n"                
+                # in case if a TypeScript keyword check is required in variable name of an interface
+                # Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
             Interfaces += "}\n\n"
             Interfaces += nestedTypes(msg, proto_package)
 
