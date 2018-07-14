@@ -31,8 +31,8 @@ Predefined = {
 # Custom Types [ <first>: input_parameter, <second>: output_observable] translated in typesript format
 CustomType = {
     "Empty": ["", "void"], 
-    "Timestamp": ["number","number"], 
-    "Duration": ["number","number"],
+    "Timestamp": ["string","string"], # should be number
+    "Duration": ["string","string"], # should be number
     "Any": ["any","any"],
 }
 
