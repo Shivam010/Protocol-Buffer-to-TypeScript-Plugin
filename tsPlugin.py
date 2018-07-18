@@ -46,10 +46,11 @@ PackAge = {}
 
 # dictPackage keys all the packages that are called in
 dictPackage = {} 
-# dictImports stores all the imports for a package
-dictImports = {} 
 # dictImports stores all the classes, enums, and interfaces for a package
 dictDeclarations = {}
+# unassigned file name
+FirstFile = "not assigned"
+ImportMap = {}
 
 # check for Predefined keywords
 def checkPredefined(name):
@@ -111,27 +112,33 @@ def functionParameter(name):
 # parametersTypes returns the Function input Parameters
 def parametersTypes(proto_package, full_name):
     name, package = interfaceName(full_name)
+    imprt = ""
     if name in CustomType:
         if CustomType[name][0] == "":
-            return ""
+            return "", imprt
         else:
-            return checkPredefined(functionParameter(name)) + ": " + CustomType[name][0]
+            return checkPredefined(functionParameter(name)) + ": " + CustomType[name][0], imprt
     else:
         inface = name
         if package != proto_package:
-            inface = package + "." + checkPredefined(inface)
-        return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface)
+            # inface = package + "." + checkPredefined(inface)
+            # return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface)
+            imprt = "import {" + inface + "} from  './" + package.lower() + ".service'\n"
+        return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface), imprt
 
 # returnTypes returns Function output Parameters
 def returnTypes(proto_package, full_name):
     name, package = interfaceName(full_name)
+    imprt = ""
     #return full_name
     if name in CustomType:
-        return CustomType[name][1]
+        return CustomType[name][1], imprt
     else:
         if package != proto_package:
-            name = package + "." + checkPredefined(name)
-        return name
+            # name = package + "." + checkPredefined(name)
+            # return name
+            imprt = "import {" + name + "} from  './" + package.lower() + ".service'\n"
+        return name, imprt
 
 # nestedTypes returns the nested declarations of enums and message 
 def nestedTypes(proto_file, proto_package):
@@ -160,8 +167,10 @@ def nestedTypes(proto_file, proto_package):
                     dtype = CustomType[dtype][0]
                 else:
                     if package != proto_package and package != str(proto_package) + msg.name:
-                            vtype = dtype
-                            dtype = package + "." + dtype
+                        vtype = dtype
+                        # dtype = package + "." + dtype
+                        if proto_package == PackAge[FirstFile]:
+                            ImportMap["import {" + dtype + "} from  './" + package.lower() + ".service'\n"] = 1
              
             # handling oneof case of protobuf as like union in c/c++
             oneOf = ""
@@ -193,7 +202,9 @@ def nestedTypes(proto_file, proto_package):
                                         ty = CustomType[ty][0]
                                     else:
                                         if package != proto_package and package != str(proto_package) + msg.name:
-                                            ty = package + "." + ty
+                                            # ty = package + "." + ty
+                                            if proto_package == PackAge[FirstFile]:
+                                                ImportMap["import {" + ty + "} from  './" + package.lower() + ".service'\n"] = 1
                                 val += ty + ";\n\t}"
                                 break
                 dtype = val
@@ -212,8 +223,8 @@ def generateCode(request, response):
     for proto_file in request.proto_file:
         PackAge[str(proto_file.name)] = str(proto_file.package)
 
-    ImportMap = {}
-    fn = str(request.proto_file[-1].name)
+    
+    FirstFile = str(request.proto_file[-1].name)
 
     # Parse requests
     for proto_file in request.proto_file:
@@ -222,12 +233,12 @@ def generateCode(request, response):
         proto_package = importVariable(PackAge[str(proto_file.name)])
 
         # Stores Imports 
-        Imports = ""
-        for imp in proto_file.dependency:
-            importName = importVariable(PackAge[imp])
-            if importName not in ImportIgnore and importName != proto_package:
-                ImportMap["import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"] = 1
-                #Imports += "import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"
+        # Imports = ""
+        # for imp in proto_file.dependency:
+        #     importName = importVariable(PackAge[imp])
+        #     if importName not in ImportIgnore and importName != proto_package:
+        #         ImportMap["import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"] = 1
+        #         #Imports += "import * as " + checkPredefined(importName) + " from './" + PackAge[imp].lower() + ".service'\n"
         
         # Stores Enums
         Enums = ""
@@ -252,7 +263,9 @@ def generateCode(request, response):
                     else:
                         if package != proto_package and package != str(proto_package) + msg.name:
                             vtype = dtype
-                            dtype = package + "." + dtype
+                            # dtype = package + "." + dtype
+                            if proto_package == PackAge[FirstFile]:
+                                ImportMap["import {" + dtype + "} from  './" + package.lower() + ".service'\n"] = 1
                 
                 # handling oneof case of protobuf as like union in c/c++
                 oneOf = ""
@@ -284,7 +297,9 @@ def generateCode(request, response):
                                             ty = CustomType[ty][0]
                                         else:
                                             if package != proto_package and package != str(proto_package) + msg.name:
-                                                ty = package + "." + ty
+                                                # ty = package + "." + ty
+                                                if proto_package == PackAge[FirstFile]:
+                                                    ImportMap["import {" + ty + "} from  './" + package.lower() + ".service'\n"] = 1
                                     val += ty + ";\n\t}"
                                     break
                     dtype = val
@@ -300,22 +315,28 @@ def generateCode(request, response):
         for service in proto_file.service:
             Classes += "export abstract class Service" + service.name + " {\n"
             for m in service.method:
-                Classes += "\tabstract " + checkPredefined(functionName(m.name)) + "(" + parametersTypes(proto_package, m.input_type) + "): Observable<" + checkPredefined(returnTypes(proto_package, m.output_type)) + ">;\n"
+                par, imprt = parametersTypes(proto_package, m.input_type)
+                if imprt != "":
+                    if proto_package == PackAge[FirstFile]:
+                        ImportMap[imprt] = 1
+                ret, imprt = returnTypes(proto_package, m.output_type)
+                if imprt != "":
+                    if proto_package == PackAge[FirstFile]:
+                        ImportMap[imprt] = 1
+                Classes += "\tabstract " + checkPredefined(functionName(m.name)) + "(" + par + "): Observable<" + checkPredefined(ret) + ">;\n"
             Classes += "}\n\n"
     
         # proto_package will acts as the key to store all imports, classes, enums, and interfaces of all files with same package name
         key = proto_package
         if key not in dictPackage:
             dictPackage[key] = True
-            dictImports[key] = Imports
             dictDeclarations[key] = Classes + Enums + Interfaces
         else:
             dictPackage[key] = True
-            dictImports[key] += Imports
             dictDeclarations[key] += Classes + Enums + Interfaces
 
     # Fill responses in TypeScript corresponding to the proto::buffer
-    key = importVariable(PackAge[fn])
+    key = importVariable(PackAge[FirstFile])
     f = response.file.add()
     name = key[0].lower()
     for i in range(1,len(key)):
@@ -323,7 +344,7 @@ def generateCode(request, response):
             name += "."
         name += key[i].lower()
     f.name = name + ".service.ts"
-    f.content = "import { Observable } from 'rxjs';\n" + dictImports[key]
+    f.content = "import { Observable } from 'rxjs';\n" 
     for i in ImportMap:
         f.content += i
     f.content += "\n" + dictDeclarations[key]

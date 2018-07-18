@@ -14,4 +14,5 @@ message name{
 
 message full{
     name full_name = 1;
+    Aproto.Extra ext = 2;
 }

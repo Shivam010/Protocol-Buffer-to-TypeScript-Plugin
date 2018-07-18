@@ -2,10 +2,17 @@ syntax = "proto3";
 
 package Aproto;
 
+import "test/test.proto";
+
 service Greeter {
   rpc Check (Emp) returns (Emp) {}
 }
 
 message Emp{
   string nam = 1;
+  test.Msg sam =2;
+}
+
+message Extra{
+  string ext = 1;
 }
