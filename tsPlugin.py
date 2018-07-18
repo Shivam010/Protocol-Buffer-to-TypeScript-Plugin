@@ -169,8 +169,8 @@ def nestedTypes(proto_file, proto_package):
                     if package != proto_package and package != str(proto_package) + msg.name:
                         vtype = dtype
                         # dtype = package + "." + dtype
-                        if proto_package == PackAge[FirstFile]:
-                            ImportMap["import {" + dtype + "} from  './" + package.lower() + ".service'\n"] = 1
+                        # if proto_package == PackAge[FirstFile]:
+                        ImportMap["import {" + dtype + "} from  './" + package.lower() + ".service'\n"] = 1
              
             # handling oneof case of protobuf as like union in c/c++
             oneOf = ""
@@ -203,8 +203,8 @@ def nestedTypes(proto_file, proto_package):
                                     else:
                                         if package != proto_package and package != str(proto_package) + msg.name:
                                             # ty = package + "." + ty
-                                            if proto_package == PackAge[FirstFile]:
-                                                ImportMap["import {" + ty + "} from  './" + package.lower() + ".service'\n"] = 1
+                                            # if proto_package == PackAge[FirstFile]:
+                                            ImportMap["import {" + ty + "} from  './" + package.lower() + ".service'\n"] = 1
                                 val += ty + ";\n\t}"
                                 break
                 dtype = val
@@ -264,8 +264,8 @@ def generateCode(request, response):
                         if package != proto_package and package != str(proto_package) + msg.name:
                             vtype = dtype
                             # dtype = package + "." + dtype
-                            if proto_package == PackAge[FirstFile]:
-                                ImportMap["import {" + dtype + "} from  './" + package.lower() + ".service'\n"] = 1
+                            # if proto_package == PackAge[FirstFile]:
+                            ImportMap["import {" + dtype + "} from  './" + package.lower() + ".service'\n"] = 1
                 
                 # handling oneof case of protobuf as like union in c/c++
                 oneOf = ""
@@ -298,8 +298,8 @@ def generateCode(request, response):
                                         else:
                                             if package != proto_package and package != str(proto_package) + msg.name:
                                                 # ty = package + "." + ty
-                                                if proto_package == PackAge[FirstFile]:
-                                                    ImportMap["import {" + ty + "} from  './" + package.lower() + ".service'\n"] = 1
+                                                # if proto_package == PackAge[FirstFile]:
+                                                ImportMap["import {" + ty + "} from  './" + package.lower() + ".service'\n"] = 1
                                     val += ty + ";\n\t}"
                                     break
                     dtype = val
@@ -317,12 +317,12 @@ def generateCode(request, response):
             for m in service.method:
                 par, imprt = parametersTypes(proto_package, m.input_type)
                 if imprt != "":
-                    if proto_package == PackAge[FirstFile]:
-                        ImportMap[imprt] = 1
+                    # if proto_package == PackAge[FirstFile]:
+                    ImportMap[imprt] = 1
                 ret, imprt = returnTypes(proto_package, m.output_type)
                 if imprt != "":
-                    if proto_package == PackAge[FirstFile]:
-                        ImportMap[imprt] = 1
+                    # if proto_package == PackAge[FirstFile]:
+                    ImportMap[imprt] = 1
                 Classes += "\tabstract " + checkPredefined(functionName(m.name)) + "(" + par + "): Observable<" + checkPredefined(ret) + ">;\n"
             Classes += "}\n\n"
     
