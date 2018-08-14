@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
-import {Extra} from  './aproto.service'
-import {Emp} from  './aproto.service'
-import {Msg} from  './test.service'
+import { Msg } from  './test.service'
+import { Emp } from  './Aproto.service'
+import { Extra } from  './Aproto.service'
 
 export abstract class Servicecheck {
 	abstract use(emp: Emp): Observable<Emp>;

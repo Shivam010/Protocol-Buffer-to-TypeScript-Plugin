@@ -132,7 +132,8 @@ def parametersTypes(proto_package, full_name):
         if package != proto_package:
             # inface = package + "." + checkPredefined(inface)
             # return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface)
-            imprt = "import { " + inface + " } from  './" + formatParameter(full_name) + ".service'\n"
+            if "Enum" not in full_name or "enum" not in full_name:
+                imprt = "import { " + inface + " } from  './" + formatParameter(full_name) + ".service'\n"
         return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface), imprt
 
 # returnTypes returns Function output Parameters
@@ -146,7 +147,8 @@ def returnTypes(proto_package, full_name):
         if package != proto_package:
             # name = package + "." + checkPredefined(name)
             # return name
-            imprt = "import { " + name + " } from  './" + formatParameter(full_name) + ".service'\n"
+            if "Enum" not in full_name or "enum" not in full_name:
+                imprt = "import { " + name + " } from  './" + formatParameter(full_name) + ".service'\n"
         return name, imprt
 
 # nestedTypes returns the nested declarations of enums and message 
@@ -179,7 +181,8 @@ def nestedTypes(proto_file, proto_package):
                         vtype = dtype
                         # dtype = package + "." + dtype
                         # if proto_package == PackAge[FirstFile]:
-                        ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
+                        if "Enum" not in full_name or "enum" not in full_name:
+                            ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
              
             # handling oneof case of protobuf as like union in c/c++
             oneOf = ""
@@ -213,7 +216,8 @@ def nestedTypes(proto_file, proto_package):
                                         if package != proto_package and package != str(proto_package) + msg.name:
                                             # ty = package + "." + ty
                                             # if proto_package == PackAge[FirstFile]:
-                                            ImportMap["import { " + ty + " } from  './" + formatParameter(nf.type_name) + ".service'\n"] = 1
+                                            if "Enum" not in full_name or "enum" not in full_name:
+                                                ImportMap["import { " + ty + " } from  './" + formatParameter(nf.type_name) + ".service'\n"] = 1
                                 val += ty + ";\n\t}"
                                 break
                 dtype = val
@@ -274,7 +278,8 @@ def generateCode(request, response):
                             vtype = dtype
                             # dtype = package + "." + dtype
                             # if proto_package == PackAge[FirstFile]:
-                            ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
+                            if "Enum" not in full_name or "enum" not in full_name:
+                                ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
                 
                 # handling oneof case of protobuf as like union in c/c++
                 oneOf = ""
@@ -308,7 +313,8 @@ def generateCode(request, response):
                                             if package != proto_package and package != str(proto_package) + msg.name:
                                                 # ty = package + "." + ty
                                                 # if proto_package == PackAge[FirstFile]:
-                                                ImportMap["import { " + ty + " } from  './" + formatParameter(nf.type_name) + ".service'\n"] = 1
+                                                if "Enum" not in full_name or "enum" not in full_name:
+                                                    ImportMap["import { " + ty + " } from  './" + formatParameter(nf.type_name) + ".service'\n"] = 1
                                     val += ty + ";\n\t}"
                                     break
                     dtype = val

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import {Msg} from  './test.service'
+import { Msg } from  './test.service'
 
 export abstract class ServiceGreeter {
 	abstract check(emp: Emp): Observable<Emp>;
