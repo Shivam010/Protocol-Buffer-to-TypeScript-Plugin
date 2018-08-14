@@ -132,7 +132,7 @@ def parametersTypes(proto_package, full_name):
         if package != proto_package:
             # inface = package + "." + checkPredefined(inface)
             # return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface)
-            if "Enum" not in full_name or "enum" not in full_name:
+            if "Enum" not in full_name and "enum" not in full_name:
                 imprt = "import { " + inface + " } from  './" + formatParameter(full_name) + ".service'\n"
         return checkPredefined(functionParameter(name)) + ": " + checkPredefined(inface), imprt
 
@@ -147,7 +147,7 @@ def returnTypes(proto_package, full_name):
         if package != proto_package:
             # name = package + "." + checkPredefined(name)
             # return name
-            if "Enum" not in full_name or "enum" not in full_name:
+            if "Enum" not in full_name and "enum" not in full_name:
                 imprt = "import { " + name + " } from  './" + formatParameter(full_name) + ".service'\n"
         return name, imprt
 
@@ -181,7 +181,7 @@ def nestedTypes(proto_file, proto_package):
                         vtype = dtype
                         # dtype = package + "." + dtype
                         # if proto_package == PackAge[FirstFile]:
-                        if "Enum" not in f.type_name or "enum" not in f.type_name:
+                        if "Enum" not in f.type_name and "enum" not in f.type_name:
                             ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
              
             # handling oneof case of protobuf as like union in c/c++
@@ -216,7 +216,7 @@ def nestedTypes(proto_file, proto_package):
                                         if package != proto_package and package != str(proto_package) + msg.name:
                                             # ty = package + "." + ty
                                             # if proto_package == PackAge[FirstFile]:
-                                            if "Enum" not in nf.type_name or "enum" not in nf.type_name:
+                                            if "Enum" not in nf.type_name and "enum" not in nf.type_name:
                                                 ImportMap["import { " + ty + " } from  './" + formatParameter(nf.type_name) + ".service'\n"] = 1
                                 val += ty + ";\n\t}"
                                 break
@@ -278,7 +278,7 @@ def generateCode(request, response):
                             vtype = dtype
                             # dtype = package + "." + dtype
                             # if proto_package == PackAge[FirstFile]:
-                            if "Enum" not in f.type_name or "enum" not in f.type_name:
+                            if "Enum" not in f.type_name and "enum" not in f.type_name:
                                 ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
                 
                 # handling oneof case of protobuf as like union in c/c++
@@ -313,7 +313,7 @@ def generateCode(request, response):
                                             if package != proto_package and package != str(proto_package) + msg.name:
                                                 # ty = package + "." + ty
                                                 # if proto_package == PackAge[FirstFile]:
-                                                if "Enum" not in nf.type_name or "enum" not in nf.type_name:
+                                                if "Enum" not in nf.type_name and "enum" not in nf.type_name:
                                                     ImportMap["import { " + ty + " } from  './" + formatParameter(nf.type_name) + ".service'\n"] = 1
                                     val += ty + ";\n\t}"
                                     break
