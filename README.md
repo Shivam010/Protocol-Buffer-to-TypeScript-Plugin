@@ -84,11 +84,11 @@ Fow Linux
 
 2) Now, generate your TypeScript code using,
 
-       $ protoc -I <Python_Path> -I <Proto_File_Directory_Path> <Proto_Files_Path> --plugin=protoc-gen-custom=<Plugin_Path> --custom_out=<Output_Directory_Path>
+       $ protoc -I <Project_Path> -I <Proto_File_Directory_Path> <Proto_Files_Path> --plugin=protoc-gen-custom=<Plugin_Path> --custom_out=<Output_Directory_Path>
 
     Like:
 
-       $ protoc -I /usr/local/include -I examples\test examples/test/test.proto --plugin=protoc-gen-custom=tsPlugin.py --custom_out=examples/output
+       $ protoc -I . -I examples\test examples/test/test.proto --plugin=protoc-gen-custom=tsPlugin.py --custom_out=examples/output
 
     or 
 
