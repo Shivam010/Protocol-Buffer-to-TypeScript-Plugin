@@ -1,6 +1,10 @@
 import { Observable } from 'rxjs';
 
-export interface Msg {
+export class Msg {
 	name: string;
+
+	constructor() {
+		this.name = ""
+	}
 }
 

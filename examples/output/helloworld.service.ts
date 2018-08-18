@@ -5,13 +5,23 @@ export abstract class ServiceGreeter {
 	abstract check(): Observable<void>;
 }
 
-export interface HelloRequest {
+export class HelloRequest {
 	name: string;
 	num: number;
 	flag: boolean;
+
+	constructor() {
+		this.name = ""
+		this.num = null
+		this.flag = null
+	}
 }
 
-export interface HelloReply {
+export class HelloReply {
 	message: string;
+
+	constructor() {
+		this.message = ""
+	}
 }
 
