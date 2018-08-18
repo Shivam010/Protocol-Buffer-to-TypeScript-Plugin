@@ -7,3 +7,4 @@ script:
   - ls -la
   - cd Protocol-Buffer-to-TypeScript-Plugin/examples
   - generate.sh
+  
