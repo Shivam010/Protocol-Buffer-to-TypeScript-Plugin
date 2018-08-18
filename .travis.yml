@@ -1,10 +1,10 @@
 language: python
 python:
-  - "2.7"
   - "3.6"
 script:
   - pwd
+  - chmod -R 777 .
   - ls -la
-  - cd Protocol-Buffer-to-TypeScript-Plugin/examples
+  - cd examples
   - generate.sh
   

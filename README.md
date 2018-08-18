@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Shivam010/Protocol-Buffer-to-TypeScript-Plugin.svg?branch=master)](https://travis-ci.org/Shivam010/Protocol-Buffer-to-TypeScript-Plugin)
+
 Protocol Buffer to TypeScript Plugin
 ====================================
 Protocol Buffer is copyright with Google Inc. https://developers.google.com/protocol-buffers/
