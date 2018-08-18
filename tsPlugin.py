@@ -238,7 +238,10 @@ def nestedTypes(proto_file, proto_package):
             elif f.label == 3 and isMap == 0:
                 constructor += "[];\n"
             elif DataType[f.type] == "Message":
-                constructor += "new " + dtype + "();\n"
+                if dtype != "string":
+                    constructor += "new " + dtype + "();\n"
+                else:
+                    constructor += "\"\";\n"
             elif DataType[f.type] == "string":
                 constructor += "\"\";\n"
             else:
@@ -354,7 +357,10 @@ def generateCode(request, response):
                 elif f.label == 3 and isMap == 0:
                     constructor += "[];\n"
                 elif DataType[f.type] == "Message":
-                    constructor += "new " + dtype + "();\n"
+                    if dtype != "string":
+                        constructor += "new " + dtype + "();\n"
+                    else:
+                        constructor += "\"\";\n"
                 elif DataType[f.type] == "string":
                     constructor += "\"\";\n"
                 else:

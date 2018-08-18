@@ -23,12 +23,14 @@ export class full {
 	metadata: {
 		[key: string]: number;
 	};
+	birthDate: string;
 
 	constructor() {
 		this.fullName = new name();
 		this.ext = new Extra();
 		this.friends = [];
 		this.metadata = {};
+		this.birthDate = "";
 	}
 }
 

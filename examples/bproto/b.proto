@@ -3,6 +3,7 @@ syntax = "proto3";
 package Bproto;
 
 import "aproto/a.proto";
+import "google/protobuf/timestamp.proto";
 
 service check{
     rpc use(Aproto.Emp) returns (Aproto.Emp) {}
@@ -17,4 +18,5 @@ message full{
     Aproto.Extra ext = 2;
     repeated name friends = 3;
     map<string,int32> metadata = 4;
+    .google.protobuf.Timestamp birth_date = 5;
 }
