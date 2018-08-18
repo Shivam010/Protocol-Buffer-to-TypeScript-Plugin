@@ -5,7 +5,9 @@ services:
 before_install: 
   - docker pull cuonglekty/alpine-python-protobuf
   - docker images
-  - docker run cuonglekty/alpine-python-protobuf . "pwd; ls -la"
+  - pwd
+  - ls -laR
+  - docker run cuonglekty/alpine-python-protobuf / "pwd; ls -laR"
 script:
   - pwd
   - chmod -R 777 .
