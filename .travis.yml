@@ -6,5 +6,5 @@ script:
   - chmod -R 777 .
   - ls -la
   - cd examples
-  - generate.sh
+  - bash ./generate.sh
   
