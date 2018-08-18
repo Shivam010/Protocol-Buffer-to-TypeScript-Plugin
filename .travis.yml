@@ -7,7 +7,7 @@ before_install:
   - docker images
   - pwd
   - ls -laR
-  - docker run cuonglekty/alpine-python-protobuf /bin/sh "/home/travis/build/Shivam010/Protocol-Buffer-to-TypeScript-Plugin/examples; bash ./generate.sh"
+  - docker run cuonglekty/alpine-python-protobuf /bin/sh "cd /home/travis/build/Shivam010/Protocol-Buffer-to-TypeScript-Plugin/examples; bash ./generate.sh"
   - pwd
   - ls -la
 script:
