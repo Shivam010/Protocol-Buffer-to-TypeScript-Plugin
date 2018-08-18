@@ -15,4 +15,6 @@ message name{
 message full{
     name full_name = 1;
     Aproto.Extra ext = 2;
+    repeated name friends = 3;
+    map<string,int32> metadata = 4;
 }

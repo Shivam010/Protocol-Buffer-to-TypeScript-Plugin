@@ -10,8 +10,8 @@ export class Emp {
 	sam: Msg;
 
 	constructor() {
-		this.nam = ""
-		this.sam = null
+		this.nam = "";
+		this.sam = new Msg();
 	}
 }
 
@@ -19,7 +19,7 @@ export class Extra {
 	ext: string;
 
 	constructor() {
-		this.ext = ""
+		this.ext = "";
 	}
 }
 

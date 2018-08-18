@@ -11,9 +11,9 @@ export class HelloRequest {
 	flag: boolean;
 
 	constructor() {
-		this.name = ""
-		this.num = null
-		this.flag = null
+		this.name = "";
+		this.num = null;
+		this.flag = null;
 	}
 }
 
@@ -21,7 +21,7 @@ export class HelloReply {
 	message: string;
 
 	constructor() {
-		this.message = ""
+		this.message = "";
 	}
 }
 
