@@ -7,7 +7,7 @@ before_install:
   - docker images
   - pwd
   - ls -laR
-  - docker run cuonglekty/alpine-python-protobuf / "pwd; ls -laR"
+  - docker run cuonglekty/alpine-python-protobuf 
 script:
   - pwd
   - chmod -R 777 .
