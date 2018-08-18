@@ -1,4 +1,4 @@
-sudo: required
+sudo: true
 script:
   - pwd
   - apt-get install python
