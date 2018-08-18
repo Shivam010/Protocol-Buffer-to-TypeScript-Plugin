@@ -168,6 +168,7 @@ def nestedTypes(proto_file, proto_package):
             return Enums + Interfaces
         Interfaces += nestedTypes(msg, proto_package)
         Interfaces += "export class " + checkPredefined(msg.name) + " {\n"
+        constructor = ""
         for f in msg.field:
             dtype = DataType[f.type]
             vtype = ""
@@ -193,7 +194,10 @@ def nestedTypes(proto_file, proto_package):
             if f.label == 3:
                 ary = "[]"
             no = len(dtype)
+            isMap = 0
             if ary != "" and dtype[no-5:] == "Entry":
+                isMap = 1
+            if isMap == 1:
                 val="{\n\t\t"
                 for nes in msg.nested_type:
                     if vtype == nes.name:
@@ -222,10 +226,25 @@ def nestedTypes(proto_file, proto_package):
                                 break
                 dtype = val
                 ary=""
-            Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n"
             # in case if a TypeScript keyword check is required in variable name of an interface
             # Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
-        Interfaces += "}\n\n"
+            Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n"
+            
+            constructor += "\t\tthis." + variableName(f.name) + " = "
+            if DataType[f.type]  == "Enum":
+                constructor += "null;\n"
+            elif isMap == 1:
+                constructor += "{};\n"
+            elif f.label == 3 and isMap == 0:
+                constructor += "[];\n"
+            elif DataType[f.type] == "Message":
+                constructor += "new " + dtype + "();\n"
+            elif DataType[f.type] == "string":
+                constructor += "\"\";\n"
+            else:
+                constructor += "null;\n"
+        constructor = "\tconstructor() {\n" + constructor + "\t}"
+        Interfaces += "\n" + constructor + "\n}\n\n"
 
     return Enums + Interfaces
 
@@ -291,7 +310,10 @@ def generateCode(request, response):
                 if f.label == 3: # 3 for LABEL_REPEATED
                     ary = "[]"
                 no = len(dtype)
-                if ary != "" and dtype[no-5:] == "Entry":
+                isMap = 0
+                if ary != "" and dtype[no-5:] == "Entry": 
+                    isMap = 1
+                if isMap == 1:
                     val="{\n\t\t"
                     for nes in msg.nested_type:
                         if vtype == nes.name:
@@ -325,19 +347,21 @@ def generateCode(request, response):
                 Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n" 
                 
                 constructor += "\t\tthis." + variableName(f.name) + " = "
-                if DataType[f.type] == "Message" or DataType[f.type]  == "Enum":
-                    if oneOf != "":
-                        constructor += "{}\n"
-                    else:
-                        constructor += "null\n"
-                elif ary != "":
-                    constructor += ary + "\n"
+                if DataType[f.type]  == "Enum":
+                    constructor += "null;\n"
+                elif isMap == 1:
+                    constructor += "{};\n"
+                elif f.label == 3 and isMap == 0:
+                    constructor += "[];\n"
+                elif DataType[f.type] == "Message":
+                    constructor += "new " + dtype + "();\n"
                 elif DataType[f.type] == "string":
-                    constructor += "\"\"\n"
+                    constructor += "\"\";\n"
                 else:
-                    constructor += "null\n"
+                    constructor += "null;\n"
             constructor = "\tconstructor() {\n" + constructor + "\t}"
             Interfaces += "\n" + constructor + "\n}\n\n"
+            
             Interfaces += nestedTypes(msg, proto_package)
 
         # Stores Classes
