@@ -1,7 +1,14 @@
 sudo: true
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+      - python
+      - python-pip
 script:
   - pwd
-  - apt-get install python
+  - pip install protobuf3
   - chmod -R 777 .
   - ls -la
   - cd examples
