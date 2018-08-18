@@ -2,15 +2,9 @@ sudo: required
 language: python
 services:
   - docker
-before_install: 
-  - docker pull cuonglekty/alpine-python-protobuf
-  - docker images
-  - pwd
-  - ls -laR
-  - docker run cuonglekty/alpine-python-protobuf /bin/sh "ls -laR"
-  - pwd
-  - ls -la
 script:
+  - docker pull cuonglekty/alpine-python-protobuf
+  - docker run cuonglekty/alpine-python-protobuf
   - pwd
   - chmod -R 777 .
   - ls -la
