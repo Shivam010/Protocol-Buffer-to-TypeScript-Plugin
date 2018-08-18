@@ -167,7 +167,7 @@ def nestedTypes(proto_file, proto_package):
         if msg.options.map_entry == True:
             return Enums + Interfaces
         Interfaces += nestedTypes(msg, proto_package)
-        Interfaces += "export interface " + checkPredefined(msg.name) + " {\n"
+        Interfaces += "export class " + checkPredefined(msg.name) + " {\n"
         for f in msg.field:
             dtype = DataType[f.type]
             vtype = ""
@@ -264,7 +264,8 @@ def generateCode(request, response):
         # Stores Interfaces
         Interfaces = ""
         for msg in proto_file.message_type:
-            Interfaces += "export interface " + checkPredefined(msg.name) + " {\n"
+            Interfaces += "export class " + checkPredefined(msg.name) + " {\n"
+            constructor = ""
             for f in msg.field:
                 dtype = DataType[f.type]
                 vtype = ""
@@ -319,10 +320,24 @@ def generateCode(request, response):
                                     break
                     dtype = val
                     ary=""
-                Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n"                
                 # in case if a TypeScript keyword check is required in variable name of an interface
                 # Interfaces += "\t" + checkPredefined(variableName(f.name)) + str(oneOf) + ": " + dtype + ary + ";\n"
-            Interfaces += "}\n\n"
+                Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n" 
+                
+                constructor += "\t\tthis." + variableName(f.name) + " = "
+                if DataType[f.type] == "Message" or DataType[f.type]  == "Enum":
+                    if oneOf != "":
+                        constructor += "{}\n"
+                    else:
+                        constructor += "null\n"
+                elif ary != "":
+                    constructor += ary + "\n"
+                elif DataType[f.type] == "string":
+                    constructor += "\"\"\n"
+                else:
+                    constructor += "null\n"
+            constructor = "\tconstructor() {\n" + constructor + "\t}"
+            Interfaces += "\n" + constructor + "\n}\n\n"
             Interfaces += nestedTypes(msg, proto_package)
 
         # Stores Classes
