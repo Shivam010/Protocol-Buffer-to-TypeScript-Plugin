@@ -6,9 +6,9 @@ addons:
     packages:
       - python
 install:
-  - wget https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-all-3.6.1.tar.gz
+  - wget https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-python-3.6.1.tar.gz
   - ls -l
-  - tar -xzvf protobuf-all-3.6.1.tar.gz
+  - tar -xzvf protobuf-python-3.6.1.tar.gz
   - pushd protobuf-3.6.1 && ./configure --prefix=/usr && make && sudo make install && popd
 script:
   - pwd
