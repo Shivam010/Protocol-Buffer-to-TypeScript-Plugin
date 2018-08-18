@@ -1,7 +1,7 @@
 sudo: required
 language: python
 install:
-  - wget https://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
+  - wget https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-all-3.6.1.tar.gz
   - tar -xzvf protobuf-2.4.1.tar.gz
   - pushd protobuf-2.4.1 && ./configure --prefix=/usr && make && sudo make install && popd
 script:
