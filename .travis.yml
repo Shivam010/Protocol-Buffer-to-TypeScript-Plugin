@@ -5,10 +5,12 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
       - python
-      - python-pip
+install:
+  - wget https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-all-3.6.1.tar.gz
+  - tar -xzvf protobuf-3.6.1.tar.gz
+  - pushd protobuf-3.6.1 && ./configure --prefix=/usr && make && sudo make install && popd
 script:
   - pwd
-  - pip install protobuf3
   - chmod -R 777 .
   - ls -la
   - cd examples
