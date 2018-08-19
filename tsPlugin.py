@@ -243,7 +243,7 @@ def nestedTypes(proto_file, proto_package):
                 if dtype == "string":
                     constructor += "\"\";\n"
                 elif dtype == "any":
-                    constructor += "any;\n"
+                    constructor += "null;\n"
                 else:
                     constructor += "new " + dtype + "();\n"
             elif DataType[f.type] == "string":
@@ -366,7 +366,7 @@ def generateCode(request, response):
                     if dtype == "string":
                         constructor += "\"\";\n"
                     elif dtype == "any":
-                        constructor += "any;\n"
+                        constructor += "null;\n"
                     else:
                         constructor += "new " + dtype + "();\n"
                 elif DataType[f.type] == "string":
