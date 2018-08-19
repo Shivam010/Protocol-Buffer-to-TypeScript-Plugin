@@ -1,14 +1,13 @@
 import { Observable } from 'rxjs';
-import { MetadataEntry } from  './Bproto.full.service'
 import { Msg } from  './test.service'
 import { Emp } from  './Aproto.service'
 import { Extra } from  './Aproto.service'
 
-export abstract class Servicecheck {
+export abstract class ServiceCheck {
 	abstract use(emp: Emp): Observable<Emp>;
 }
 
-export class name {
+export class Name {
 	id: string;
 
 	constructor() {
@@ -16,17 +15,17 @@ export class name {
 	}
 }
 
-export class full {
-	fullName: name;
+export class Full {
+	fullName: Name;
 	ext: Extra;
-	friends: name[];
+	friends: Name[];
 	metadata: {
 		[key: string]: number;
 	};
 	birthDate: string;
 
 	constructor() {
-		this.fullName = new name();
+		this.fullName = new Name();
 		this.ext = new Extra();
 		this.friends = [];
 		this.metadata = {};

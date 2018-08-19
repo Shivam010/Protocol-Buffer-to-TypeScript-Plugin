@@ -5,18 +5,18 @@ package Bproto;
 import "aproto/a.proto";
 import "google/protobuf/timestamp.proto";
 
-service check{
-    rpc use(Aproto.Emp) returns (Aproto.Emp) {}
+service Check{
+    rpc Use(Aproto.Emp) returns (Aproto.Emp) {}
 }
 
-message name{
+message Name{
     string id = 1;
 }
 
-message full{
-    name full_name = 1;
+message Full{
+    Name full_name = 1;
     Aproto.Extra ext = 2;
-    repeated name friends = 3;
+    repeated Name friends = 3;
     map<string,int32> metadata = 4;
     .google.protobuf.Timestamp birth_date = 5;
 }
