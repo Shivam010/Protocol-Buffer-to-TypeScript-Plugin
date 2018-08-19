@@ -12,13 +12,16 @@ install:
   - pushd protobuf-3.6.1 && ./configure --prefix=/usr && make && sudo make install && popd
 script:
   - pwd
-  - chmod -R 777 .
   - ls -la
   - cd protobuf-3.6.1/python
   - python setup.py build
   - python setup.py test
   - cp -R ../../examples ./examples
   - cp ../../tsPlugin.py ./tsPlugin.py
+  - ls -la
+  - chmod -R 777 examples
+  - chmod 777 ./tsPlugin.py
+  - ls -la
   - cd examples
   - bash ./generate.sh
   
