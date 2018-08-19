@@ -11,9 +11,14 @@ addons:
 install:
   - ls -la
   - bash install_protobuf.sh
+  - pwd
 before_script:
   - pwd
   - ls -Rla $HOME/protobuf
+  - cp -R $HOME/build/Shivam010/Protocol-Buffer-to-TypeScript-Plugin/* $HOME/protobuf
+  - ls -la
+  - cd $HOME/protobuf
+  - pwd
 script:
   - pwd
   - ls -la
