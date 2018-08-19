@@ -2,7 +2,7 @@
 local_path=$(pwd)
 
 generate() {
-    protoc -I . -I ${local_path} ${local_path}/${1}*.proto --plugin=protoc-gen-custom=../tsPlugin.py --custom_out=${local_path}/new_outputs
+    $HOME/protobuf/bin/protoc -I . -I ${local_path} ${local_path}/${1}*.proto --plugin=protoc-gen-custom=../tsPlugin.py --custom_out=${local_path}/new_outputs
 }
 
 mkdir new_outputs
