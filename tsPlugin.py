@@ -231,17 +231,21 @@ def nestedTypes(proto_file, proto_package):
             Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n"
             
             constructor += "\t\tthis." + variableName(f.name) + " = "
-            if DataType[f.type]  == "Enum":
+            if variableName(f.name) == "currencyCode": # setting default value for a variable
+                constructor += "\"USD\""
+            elif DataType[f.type]  == "Enum":
                 constructor += "null;\n"
             elif isMap == 1:
                 constructor += "{};\n"
             elif f.label == 3 and isMap == 0:
                 constructor += "[];\n"
             elif DataType[f.type] == "Message":
-                if dtype != "string":
-                    constructor += "new " + dtype + "();\n"
-                else:
+                if dtype == "string":
                     constructor += "\"\";\n"
+                elif dtype == "any":
+                    constructor += "any;\n"
+                else:
+                    constructor += "new " + dtype + "();\n"
             elif DataType[f.type] == "string":
                 constructor += "\"\";\n"
             else:
@@ -350,17 +354,21 @@ def generateCode(request, response):
                 Interfaces += "\t" + variableName(f.name) + str(oneOf) + ": " + dtype + ary + ";\n" 
                 
                 constructor += "\t\tthis." + variableName(f.name) + " = "
-                if DataType[f.type]  == "Enum":
+                if variableName(f.name) == "currencyCode": # setting default value for a variable
+                    constructor += "\"USD\""
+                elif DataType[f.type]  == "Enum":
                     constructor += "null;\n"
                 elif isMap == 1:
                     constructor += "{};\n"
                 elif f.label == 3 and isMap == 0:
                     constructor += "[];\n"
                 elif DataType[f.type] == "Message":
-                    if dtype != "string":
-                        constructor += "new " + dtype + "();\n"
-                    else:
+                    if dtype == "string":
                         constructor += "\"\";\n"
+                    elif dtype == "any":
+                        constructor += "any;\n"
+                    else:
+                        constructor += "new " + dtype + "();\n"
                 elif DataType[f.type] == "string":
                     constructor += "\"\";\n"
                 else:
