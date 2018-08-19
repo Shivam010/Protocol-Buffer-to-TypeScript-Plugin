@@ -10,7 +10,6 @@ addons:
       - python
 install:
   - ls -la
-  - rm -rf $HOME/protobuf/lib/*
   - bash install_protobuf.sh
   - pwd
   - ls -la
