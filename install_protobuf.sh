@@ -9,7 +9,7 @@ if [ 1 ]; then
   pushd protobuf-3.6.1 && ./configure --prefix=$HOME/protobuf && make && sudo make install && popd
   pwd
   ls -la
-  cd python
+  cd protobuf-3.6.1/python
   python setup.py build
   python setup.py test
   pwd 
