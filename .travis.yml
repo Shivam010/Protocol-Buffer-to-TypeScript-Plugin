@@ -14,7 +14,6 @@ install:
 before_script:
   - pwd
   - ls -Rla $HOME/protobuf
-  - cd $HOME/protobuf
 script:
   - pwd
   - ls -la
