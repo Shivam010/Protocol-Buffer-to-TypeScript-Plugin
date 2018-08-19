@@ -1,4 +1,7 @@
 sudo: true
+cache:
+  directories:
+  - $HOME/protobuf
 addons:
   apt:
     sources:
@@ -6,22 +9,15 @@ addons:
     packages:
       - python
 install:
-  - wget https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-python-3.6.1.tar.gz
-  - ls -l
-  - tar -xzvf protobuf-python-3.6.1.tar.gz
-  - pushd protobuf-3.6.1 && ./configure --prefix=/usr && make && sudo make install && popd
+  - ls -la
+  - bash install_protobuf.sh
+before_script:
+  - pwd
+  - ls -Rla $HOME/protobuf
+  - cd $HOME/protobuf
 script:
   - pwd
   - ls -la
-  - cd protobuf-3.6.1/python
-  - python setup.py build
-  - python setup.py test
-  - cp -R ../../examples ./examples
-  - cp ../../tsPlugin.py ./tsPlugin.py
-  - ls -la
-  - chmod -R 777 examples
-  - chmod 777 ./tsPlugin.py
-  - ls -la
   - cd examples
   - bash ./generate.sh
-  
+  - ls -la
