@@ -12,6 +12,7 @@ install:
   - ls -la
   - bash install_protobuf.sh
   - pwd
+  - ls -la
 before_script:
   - pwd
   - ls -Rla $HOME/protobuf
