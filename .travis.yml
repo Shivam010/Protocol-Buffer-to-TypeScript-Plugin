@@ -17,6 +17,7 @@ before_script:
 script:
   - pwd
   - ls -la
+  - chmod -R 777 .
   - cd examples
   - bash ./generate.sh
   - ls -la
