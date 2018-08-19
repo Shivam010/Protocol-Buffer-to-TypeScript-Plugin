@@ -15,9 +15,9 @@ install:
 before_script:
   - pwd
   - ls -Rla $HOME/protobuf
-  - cp -R $HOME/build/Shivam010/Protocol-Buffer-to-TypeScript-Plugin/* $HOME/protobuf
+  - cp -R $HOME/build/Shivam010/Protocol-Buffer-to-TypeScript-Plugin/* $HOME/protobuf/bin/
   - ls -la
-  - cd $HOME/protobuf
+  - cd $HOME/protobuf/bin
   - pwd
 script:
   - pwd
