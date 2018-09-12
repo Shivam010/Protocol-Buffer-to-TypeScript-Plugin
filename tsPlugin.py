@@ -34,6 +34,7 @@ CustomType = {
     "Timestamp": ["string","string"], # should be number
     "Duration": ["string","string"], # should be number
     "Any": ["any","any"],
+    "BoolValue": ["boolean", "boolean"],
 }
 
 # Ignored Imports are the imports for which we are providing custom types
