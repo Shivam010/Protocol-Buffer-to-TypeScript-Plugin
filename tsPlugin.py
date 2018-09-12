@@ -20,12 +20,12 @@ Predefined = {
     "export": "_export", "extends": "_extends", "false": "_false", "finally": "_finally", "for": "_for", "function": "_function",
     "if": "_if", "import": "_import", "in": "_in", "instanceof": "_instanceof", "new": "_new", "null": "_null",
     "return": "_return", "super": "_super", "switch": "_switch", "this": "_this", "throw": "_throw", "true": "_true",
-    "try": "_try", "typeof": "_typeof", "var": "_var", "void": "void", "while": "_while", "with": "_with",
+    "try": "_try", "typeof": "_typeof", "var": "_var", "void": "_void", "while": "_while", "with": "_with",
     "implements": "_implements", "interface": "_interface", "let": "_let", "package": "_package", "private": "_private", "protected": "_protected",
     "public": "_public", "static": "_static", "yield": "_yield", "any": "_any", "boolean": "_boolean", "number": "_number",
     "string": "_string", "symbol": "_symbol", "abstract": "_abstract", "as": "_as", "async": "_async", "await": "_await",
     "constructor": "_constructor", "declare": "_declare", "from": "_from", "get": "_get", "is": "_is", "module": "_module",
-    "namespace": "_namespace", "of": "_of", "require": "_require", "set": "_set", "type": "type", "readonly": "_readonly"
+    "namespace": "_namespace", "of": "_of", "require": "_require", "set": "_set", "type": "_type", "readonly": "_readonly"
 }
 
 # Custom Types [ <first>: input_parameter, <second>: output_observable] translated in typesript format
@@ -392,7 +392,7 @@ def generateCode(request, response):
                 if imprt != "":
                     # if proto_package == PackAge[FirstFile]:
                     ImportMap[imprt] = 1
-                Classes += "\tabstract " + checkPredefined(functionName(m.name)) + "(" + par + "): Observable<" + checkPredefined(ret) + ">;\n"
+                Classes += "\tabstract " + checkPredefined(functionName(m.name)) + "(" + par + "): Observable<" + ret + ">;\n"
             Classes += "}\n\n"
     
         # proto_package will acts as the key to store all imports, classes, enums, and interfaces of all files with same package name

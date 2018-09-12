@@ -3,9 +3,11 @@ syntax = "proto3";
 package Aproto;
 
 import "test/test.proto";
+import "google/protobuf/wrappers.proto";
 
 service Greeter {
   rpc Check (Emp) returns (Emp) {}
+  rpc BoolCheck (google.protobuf.BoolValue) returns (google.protobuf.BoolValue);
 }
 
 message Emp{
