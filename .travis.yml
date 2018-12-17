@@ -9,6 +9,7 @@ addons:
     packages:
       - python
 install:
+  - ls -la
   - bash install_protobuf.sh
   - pwd
   - ls -la
