@@ -11,7 +11,7 @@ export class Name {
 	id: string;
 
 	constructor() {
-		this.id = "";
+		this.id = null;
 	}
 }
 

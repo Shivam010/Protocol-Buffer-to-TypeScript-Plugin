@@ -11,7 +11,7 @@ export class Emp {
 	sam: Msg;
 
 	constructor() {
-		this.nam = "";
+		this.nam = null;
 		this.sam = new Msg();
 	}
 }
@@ -20,7 +20,7 @@ export class Extra {
 	ext: string;
 
 	constructor() {
-		this.ext = "";
+		this.ext = null;
 	}
 }
 

@@ -4,7 +4,7 @@ export class Msg {
 	name: string;
 
 	constructor() {
-		this.name = "";
+		this.name = null;
 	}
 }
 

@@ -183,8 +183,8 @@ def nestedTypes(proto_file, proto_package):
                         vtype = dtype
                         # dtype = package + "." + dtype
                         # if proto_package == PackAge[FirstFile]:
-                        if "Enum" not in f.type_name and "enum" not in f.type_name and dtype != "BoolValue":
-                            ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
+                        # if "Enum" not in f.type_name and "enum" not in f.type_name and dtype != "BoolValue":
+                        #     ImportMap["import { " + dtype + " } from  './" + formatParameter(f.type_name) + ".service'\n"] = 1
              
             # handling oneof case of protobuf as like union in c/c++
             oneOf = ""
@@ -247,8 +247,8 @@ def nestedTypes(proto_file, proto_package):
                     constructor += "null;\n"
                 else:
                     constructor += "new " + dtype + "();\n"
-            elif DataType[f.type] == "string":
-                constructor += "\"\";\n"
+            # elif DataType[f.type] == "string":
+            #     constructor += "\"\";\n"
             else:
                 constructor += "null;\n"
         constructor = "\tconstructor() {\n" + constructor + "\t}"
@@ -370,8 +370,8 @@ def generateCode(request, response):
                         constructor += "null;\n"
                     else:
                         constructor += "new " + dtype + "();\n"
-                elif DataType[f.type] == "string":
-                    constructor += "\"\";\n"
+                # elif DataType[f.type] == "string":
+                #     constructor += "\"\";\n"
                 else:
                     constructor += "null;\n"
             constructor = "\tconstructor() {\n" + constructor + "\t}"
