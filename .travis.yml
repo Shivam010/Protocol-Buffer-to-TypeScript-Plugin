@@ -14,12 +14,16 @@ install:
   - pwd
   - ls -la
 before_script:
+  - pwd
   - ls -Rla $HOME/protobuf
   - cp -R $HOME/build/Shivam010/Protocol-Buffer-to-TypeScript-Plugin/* $HOME/protobuf/bin/
   - cp -R $HOME/protobuf/bin/protobuf-3.6.1/python/google $HOME/protobuf/bin/
   - ls -la
   - cd $HOME/protobuf/bin
+  - pwd
 script:
+  - pwd
+  - ls -la
   - cd examples
   - bash ./generate.sh
   - ls -la
