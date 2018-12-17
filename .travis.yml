@@ -16,6 +16,7 @@ install:
 before_script:
   - pwd
   - ls -Rla $HOME/protobuf
+  - chmod -R 777 $HOME/protobuf/bin/
   - cp -R $HOME/build/Shivam010/Protocol-Buffer-to-TypeScript-Plugin/* $HOME/protobuf/bin/
   - cp -R $HOME/protobuf/bin/protobuf-3.6.1/python/google $HOME/protobuf/bin/
   - ls -la
