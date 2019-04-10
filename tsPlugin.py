@@ -233,7 +233,7 @@ def nestedTypes(proto_file, proto_package):
             
             constructor += "\t\tthis." + variableName(f.name) + " = "
             if variableName(f.name) == "currencyCode": # setting default value for a variable
-                constructor += "\"USD\""
+                constructor += "\"USD\";"
             elif DataType[f.type]  == "Enum":
                 constructor += "null;\n"
             elif isMap == 1:
@@ -356,7 +356,7 @@ def generateCode(request, response):
                 
                 constructor += "\t\tthis." + variableName(f.name) + " = "
                 if variableName(f.name) == "currencyCode": # setting default value for a variable
-                    constructor += "\"USD\""
+                    constructor += "\"USD\";"
                 elif DataType[f.type]  == "Enum":
                     constructor += "null;\n"
                 elif isMap == 1:
