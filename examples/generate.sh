@@ -2,7 +2,7 @@
 local_path=$(pwd)
 
 generate() {
-    $HOME/protobuf/bin/protoc -I ${local_path} ${local_path}/${1}*.proto --plugin=protoc-gen-custom=../tsPlugin.py --custom_out=${local_path}/test_output
+    /usr/bin/env protoc -I ${local_path} ${local_path}/${1}*.proto --plugin=protoc-gen-custom=../tsPlugin.py --custom_out=${local_path}/test_output
 }
 
 if [ ! -d "test_output" ]; then
